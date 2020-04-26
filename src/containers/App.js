@@ -5,12 +5,15 @@ import SearchBox from '../conponents/SearchBox';
 import Scroll from '../conponents/Scroll';
 import './App.css';
 
-import {setSearchFiled} from '../actions'
+import {setSearchFiled, requestRobots} from '../actions'
 
 
 const mapStateToProps = state => {
     return {
-        searchfiled : state.searchfiled
+        searchfiled : state.searchRobots.searchfiled,
+        robots : state.requestRobots.robots,
+        isPending : state.requestRobots.isPending,
+        error : state.requestRobots.error
     }
        
     
@@ -18,7 +21,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
     return({
-        OnSearchChange : (event) => dispatch(setSearchFiled(event.target.value))
+        OnSearchChange : (event) => dispatch(setSearchFiled(event.target.value)),
+        OnRequestRobots : () => dispatch(requestRobots())
         
     })
 }
@@ -26,19 +30,12 @@ class App extends Component{
    constructor(){
        super();
        this.state =({
-            robots:[],
             date : new Date()
        })
    }
 
    componentDidMount(){
-    fetch('https://jsonplaceholder.typicode.com/users')
-    .then(response => {
-        return response.json()})
-    .then(users => {
-        this.setState({robots:users})
-    })   
-    setInterval(() => this.tick(), 1000);
+    this.props.OnRequestRobots()
    }
 
    tick(){
@@ -46,14 +43,14 @@ class App extends Component{
    }
 
     render(){
-        const {robots,date} = this.state;
-        const {searchfiled,OnSearchChange} = this.props;
+        const {date} = this.state;
+        const {robots,searchfiled,OnSearchChange,isPending} = this.props;
         const filterSearch = robots.filter((robot)=>{
             return robot.name.toLowerCase().includes(searchfiled.toLowerCase());
         })
         /*robots.lenght === 0 <=> (robots.length will recieve 0 like a default value
             & javascript evaluate it to false so we need to add '!')*/
- return !robots.length ?
+ return isPending ?
           <h1 className="tc f1">{date.toLocaleTimeString()}</h1> :
        (
             <div className="tc">
