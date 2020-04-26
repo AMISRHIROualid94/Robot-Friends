@@ -9,7 +9,6 @@ import {setSearchFiled} from '../actions'
 
 
 const mapStateToProps = state => {
-    console.log(new Date(),'mapStatetoprops')
     return {
         searchfiled : state.searchfiled
     }
@@ -18,7 +17,6 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-    console.log(new Date(),'mapDispatchToProps')
     return({
         OnSearchChange : (event) => dispatch(setSearchFiled(event.target.value))
         

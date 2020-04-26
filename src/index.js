@@ -2,11 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import { searchRobots } from './reducer';
 import './index.css';
 import App from './containers/App';
 import "tachyons";
 import * as serviceWorker from './serviceWorker';
-import { searchRobots } from './reducer';
+
 
 const store = createStore(searchRobots)
 
